@@ -1,17 +1,14 @@
 package com.petshop;
 
 import com.petshop.bll.Application;
+import com.petshop.bll.Demo;
+import com.petshop.bll.domain.AppConsole;
+import com.petshop.dto.Pet;
+
+import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-    var app = new Application();
-
-    app.run();
-
-    try {
-      Thread.sleep(10_000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    Demo.demo();
   }
 }
