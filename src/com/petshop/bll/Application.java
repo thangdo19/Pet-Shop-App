@@ -7,7 +7,6 @@ import com.petshop.bll.logic.PetModder;
 import com.petshop.dto.Pet;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,18 +14,8 @@ public class Application {
   private ExecutorService executor;
 
   public Application(int nThreads) {
-    // create 4 worker threads for this executor
+    // create n worker threads for this executor
     executor = Executors.newFixedThreadPool(nThreads);
-  }
-
-  public void run() {
-    var pet = new Pet("DOG004", "Ha Noi", "Dog", "Sol", "Male", 2);
-    var newPet = new Pet("DOG004", "TP Ho Chi Minh", "Dog", "Sol", "Male", 2);
-
-    PetModdable petModdable = PetModder.getInstance();
-//    System.out.println(petModdable.updatePet(pet.getId(), newPet));
-//    System.out.println(petModdable.deletePet(pet.getId()));
-    System.out.println(petModdable.addPet(pet));
   }
 
   public void showAllPetsAsync() {
@@ -38,13 +27,19 @@ public class Application {
     );
   }
 
-  public void updatePetAsync() {
+  public void addPetAsync(Pet pet) {
     CompletableFuture.runAsync(() -> {
-        var pet = new Pet("DOG004", "Ha Noi", "Dog", "Sol", "Male", 2);
-        var newPet = new Pet("DOG004", "TP Ho Chi Minh", "Dog", "Sol", "Male", 2);
+      PetModdable petModdable = PetModder.getInstance();
+      System.out.println(petModdable.addPet(pet));
+      }
+      , this.executor
+    );
+  }
 
+  public void updatePetAsync(String id, Pet desPet) {
+    CompletableFuture.runAsync(() -> {
         PetModdable petModdable = PetModder.getInstance();
-        System.out.println(petModdable.updatePet(pet.getId(), newPet));
+        System.out.println(petModdable.updatePet(id, desPet));
       }
       , this.executor
     );
@@ -71,4 +66,3 @@ public class Application {
       executor.shutdown();
   }
 }
-
